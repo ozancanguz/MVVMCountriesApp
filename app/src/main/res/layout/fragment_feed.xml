@@ -23,6 +23,7 @@
                 android:layout_marginBottom="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/countryError"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,12 +31,14 @@
                 android:id="@+id/countryError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="314dp"
                 android:text="Error! Try Again"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.844"
+                app:layout_constraintStart_toEndOf="@+id/countryList"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-            </TextView>
+                app:layout_constraintTop_toTopOf="@+id/countryList"></TextView>
 
             <ProgressBar
                 android:id="@+id/countryLoading"
@@ -43,9 +46,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintStart_toStartOf="@+id/countryList"
+                app:layout_constraintTop_toTopOf="@+id/countryList">
 
             </ProgressBar>
 
