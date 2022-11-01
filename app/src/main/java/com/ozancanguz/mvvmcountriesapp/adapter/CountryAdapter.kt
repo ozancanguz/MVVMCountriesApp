@@ -3,9 +3,11 @@ package com.ozancanguz.mvvmcountriesapp.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.ozancanguz.mvvmcountriesapp.R
 import com.ozancanguz.mvvmcountriesapp.model.Country
+import com.ozancanguz.mvvmcountriesapp.view.FeedFragmentDirections
 import kotlinx.android.synthetic.main.fragment_country.view.*
 import kotlinx.android.synthetic.main.item_country.view.*
 
@@ -30,6 +32,12 @@ class CountryAdapter(private val countryList:ArrayList<Country>):
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         holder.itemView.name.text=countryList[position].countryName
         holder.itemView.region.text=countryList[position].countryRegion
+
+        // to navigate countryviewmodel
+        holder.itemView.setOnClickListener {
+            val action=FeedFragmentDirections.actionFeedFragmentToCountryFragment()
+            Navigation.findNavController(it).navigate(action)
+        }
 
 
     }
