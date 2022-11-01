@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ozancanguz.mvvmcountriesapp.R
 import com.ozancanguz.mvvmcountriesapp.adapter.CountryAdapter
 import com.ozancanguz.mvvmcountriesapp.viewmodel.FeedViewModel
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_feed.*
 
 
@@ -19,6 +20,9 @@ class FeedFragment : Fragment() {
     //1
     private lateinit var viewModel: FeedViewModel
     private  var countryAdapter=CountryAdapter(arrayListOf())
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
