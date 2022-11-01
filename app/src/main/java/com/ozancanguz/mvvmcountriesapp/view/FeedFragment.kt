@@ -52,7 +52,7 @@ class FeedFragment : Fragment() {
 
     //3
     fun observeLiveData(){
-        viewModel.countries.observe(this, Observer {countries ->
+        viewModel.countries.observe(viewLifecycleOwner, Observer {countries ->
 
             countries.let {
                 countryList.visibility=View.VISIBLE
@@ -61,7 +61,7 @@ class FeedFragment : Fragment() {
             }
         })
 
-        viewModel.countryError.observe(this, Observer { error ->
+        viewModel.countryError.observe(viewLifecycleOwner, Observer { error ->
             error.let {
                if(it){
                    countryError.visibility=View.VISIBLE
