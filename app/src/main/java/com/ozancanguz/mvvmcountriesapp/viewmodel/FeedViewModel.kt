@@ -1,8 +1,10 @@
 package com.ozancanguz.mvvmcountriesapp.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ozancanguz.mvvmcountriesapp.Util.CustomSharedPreferences
 import com.ozancanguz.mvvmcountriesapp.model.Country
 import com.ozancanguz.mvvmcountriesapp.service.CountryApi
 import com.ozancanguz.mvvmcountriesapp.service.CountryApiService
@@ -20,13 +22,33 @@ class FeedViewModel(application: Application): BaseViewModel(application) {
     private val countryApiService = CountryApiService()
     private val disposable = CompositeDisposable()
 
+    private var customPreferences = CustomSharedPreferences(getApplication())
+    private var refreshTime = 10 * 60 * 1000 * 1000 * 1000L
 
     var countries=MutableLiveData<List<Country>>()
     val countryError = MutableLiveData<Boolean>()
     val countryLoading = MutableLiveData<Boolean>()
 
     fun refreshData(){
+        val updateTime = customPreferences.getTime()
+        if (updateTime != null && updateTime != 0L && System.nanoTime() - updateTime < refreshTime) {
+            getDataFromSQLite()
+        } else {
+            getDataFromRemote()
+        }
+
+    }
+    fun refreshFromAPI() {
         getDataFromRemote()
+    }
+
+    private fun getDataFromSQLite() {
+        countryLoading.value = true
+        launch {
+            val countries = CountryDatabase(getApplication()).countryDao().getAllCountries()
+            showCountries(countries)
+            Toast.makeText(getApplication(),"Countries From SQLite",Toast.LENGTH_LONG).show()
+        }
     }
 
 
@@ -42,6 +64,7 @@ class FeedViewModel(application: Application): BaseViewModel(application) {
                   override fun onSuccess(value: List<Country>?) {
                       if (value != null) {
                           storeInSQLite(value)
+                          Toast.makeText(getApplication(),"Countries From API",Toast.LENGTH_LONG).show()
                       }
 
                    }
@@ -74,6 +97,7 @@ class FeedViewModel(application: Application): BaseViewModel(application) {
                 list[i].uuid = listLong[i].toInt()
                 i = i + 1
             }
+            showCountries(list)
 
         }
 
