@@ -1,16 +1,20 @@
 package com.ozancanguz.mvvmcountriesapp.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ozancanguz.mvvmcountriesapp.model.Country
 import com.ozancanguz.mvvmcountriesapp.service.CountryApi
 import com.ozancanguz.mvvmcountriesapp.service.CountryApiService
+import com.ozancanguz.mvvmcountriesapp.service.CountryDatabase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-class FeedViewModel: ViewModel() {
+class FeedViewModel(application: Application): BaseViewModel(application) {
 
     // for retrofit part 3
     private val countryApiService = CountryApiService()
@@ -61,6 +65,17 @@ class FeedViewModel: ViewModel() {
     }
 
     private fun storeInSQLite(list: List<Country>){
+        launch {
+            val dao = CountryDatabase(getApplication()).countryDao()
+            dao.deleteAllCountries()
+            val listLong = dao.insertAll(*list.toTypedArray()) // -> list -> individual
+            var i = 0
+            while (i < list.size) {
+                list[i].uuid = listLong[i].toInt()
+                i = i + 1
+            }
+
+        }
 
 
     }
