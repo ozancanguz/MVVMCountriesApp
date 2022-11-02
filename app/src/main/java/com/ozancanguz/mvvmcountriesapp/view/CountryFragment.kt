@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ozancanguz.mvvmcountriesapp.R
+import com.ozancanguz.mvvmcountriesapp.downloadFromUrl
+import com.ozancanguz.mvvmcountriesapp.placeholderProgressBar
 import com.ozancanguz.mvvmcountriesapp.viewmodel.CountryViewModel
 import kotlinx.android.synthetic.main.fragment_country.*
 
@@ -18,10 +20,6 @@ class CountryFragment : Fragment() {
 
     //1
     private lateinit var viewmodel:CountryViewModel
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,26 +32,32 @@ class CountryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //2
-        viewmodel=ViewModelProvider(this).get(CountryViewModel::class.java)
-        viewmodel.getDataFromRoom()
-
         arguments?.let {
             countryUuid=CountryFragmentArgs.fromBundle(it).countryUuid
         }
+        //2
+        viewmodel=ViewModelProvider(this).get(CountryViewModel::class.java)
+        viewmodel.getDataFromRoom(countryUuid)
+
+
 
          observeLiveData()
 
 
     }
     private fun observeLiveData(){
-        viewmodel.countryLiveData.observe(this, Observer { country ->
+        viewmodel.countryLiveData.observe(viewLifecycleOwner, Observer { country ->
             country.let {
                 countryName.text = country.countryName
                 countryCapital.text = country.countryCapital
                 countryCurrency.text = country.countryCurrency
                 countryLanguage.text = country.countryLanguage
                 countryRegion.text = country.countryRegion
+                context?.let {
+                    countryImage.downloadFromUrl(country.imageUrl, placeholderProgressBar(it))
+                }
+
+
             }
 
         })

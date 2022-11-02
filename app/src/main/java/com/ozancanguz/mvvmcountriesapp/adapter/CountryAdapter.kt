@@ -38,6 +38,7 @@ class CountryAdapter(private val countryList:ArrayList<Country>):
         // to navigate countryviewmodel
         holder.itemView.setOnClickListener {
             val action=FeedFragmentDirections.actionFeedFragmentToCountryFragment()
+            action.countryUuid=countryList[position].uuid
             Navigation.findNavController(it).navigate(action)
         }
         holder.itemView.imageView.downloadFromUrl(countryList[position].imageUrl,
